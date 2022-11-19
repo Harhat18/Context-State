@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 
 function Secondary() {
   const list = useSelector((s) => s.nameList);
+  const myUserName = useSelector((s) => s.nameList);
   return (
     <SafeAreaView>
-      <Text></Text>
+      <Text>Username : {}</Text>
       <FlatList
         keyExtractor={(_, index) => index.toString()}
         data={list}

@@ -6,6 +6,8 @@ export default function (state, action) {
       return { ...state, nameList: newList };
     case "CLEAN_LIST":
       return { ...state, nameList: [] };
+    case "SET_USERNAME":
+      return { ...state, username: action.payload.username };
     default:
       return state;
   }
