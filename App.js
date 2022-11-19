@@ -1,20 +1,51 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { Text, View, Button } from "react-native";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { legacy_createStore as createStore } from "redux";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const initialState = {
+  counter: 0,
+};
+
+function reducers(state, action) {
+  switch (action.type) {
+    case "UPDATE_COUNTER":
+      return { ...state, counter: state.counter + 1 };
+    default:
+      return state;
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default () => {
+  return (
+    <Provider store={createStore(reducers, initialState)}>
+      <View style={{ flex: 1 }}>
+        <First />
+        <Second />
+      </View>
+    </Provider>
+  );
+};
+
+const First = () => {
+  const counter = useSelector((selector) => selector.counter);
+  const dispatch = useDispatch();
+  const handleUpdate = () => {
+    dispatch({ type: "UPDATE_COUNTER" });
+  };
+  return (
+    <View style={{ flex: 1, backgroundColor: "eceff1" }}>
+      <Text style={{ fontSize: 30 }}>First : {counter}</Text>
+      <Button title="update" onPress={handleUpdate} />
+    </View>
+  );
+};
+
+const Second = () => {
+  const counter = useSelector((selector) => selector.counter);
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={{ fontSize: 30 }}>Second : {counter}</Text>
+    </View>
+  );
+};
