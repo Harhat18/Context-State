@@ -1,51 +1,25 @@
 import React from "react";
-import { Text, View, Button } from "react-native";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { legacy_createStore as createStore } from "redux";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const initialState = {
-  counter: 0,
-};
+import Primary from "./src/pages/Primary";
+import Secondary from "./src/pages/Secondary";
 
-function reducers(state, action) {
-  switch (action.type) {
-    case "UPDATE_COUNTER":
-      return { ...state, counter: state.counter + 1 };
-    default:
-      return state;
-  }
-}
+import UserProvider from "./src/context/Provider";
 
-export default () => {
+const Tab = createBottomTabNavigator();
+
+const Router = () => {
   return (
-    <Provider store={createStore(reducers, initialState)}>
-      <View style={{ flex: 1 }}>
-        <First />
-        <Second />
-      </View>
-    </Provider>
+    <UserProvider>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen name="Primary" component={Primary} />
+          <Tab.Screen name="Secondary" component={Secondary} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 };
 
-const First = () => {
-  const counter = useSelector((selector) => selector.counter);
-  const dispatch = useDispatch();
-  const handleUpdate = () => {
-    dispatch({ type: "UPDATE_COUNTER" });
-  };
-  return (
-    <View style={{ flex: 1, backgroundColor: "eceff1" }}>
-      <Text style={{ fontSize: 30 }}>First : {counter}</Text>
-      <Button title="update" onPress={handleUpdate} />
-    </View>
-  );
-};
-
-const Second = () => {
-  const counter = useSelector((selector) => selector.counter);
-  return (
-    <View style={{ flex: 1 }}>
-      <Text style={{ fontSize: 30 }}>Second : {counter}</Text>
-    </View>
-  );
-};
+export default Router;
